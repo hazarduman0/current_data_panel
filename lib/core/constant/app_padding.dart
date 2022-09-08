@@ -9,4 +9,11 @@ class AppPadding {
       EdgeInsets.symmetric(horizontal: size.longestSide * 0.05);
   static EdgeInsets standartVertical(Size size) =>
       EdgeInsets.symmetric(vertical: size.longestSide * 0.05);
+
+  static EdgeInsets smallHorizontal(Size size) =>
+      EdgeInsets.symmetric(horizontal: size.longestSide * 0.02);
+
+  static EdgeInsets smallVertical(Size size) =>
+      EdgeInsets.symmetric(vertical: size.longestSide * 0.01);    
+
 }

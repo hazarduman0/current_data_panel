@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:current_data_panel/controller/data_controller.dart';
 import 'package:current_data_panel/controller/dialog_controller.dart';
 import 'package:current_data_panel/core/constant/app_color.dart';
 import 'package:current_data_panel/ui/widget/data_box.dart';
@@ -11,6 +12,7 @@ class MainPage extends StatelessWidget {
   MainPage({super.key});
 
   final DialogController _dc = Get.find();
+  final DataController _dtc = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +20,24 @@ class MainPage extends StatelessWidget {
     log('width: ${size.width}');
     return Scaffold(
       body: GetBuilder<DialogController>(builder: (dc) {
-        return Stack(
-          children: [
-            SizedBox(
-              height: size.height,
-              width: size.width,
-              child: SingleChildScrollView(
-                child: Wrap(
-                  children: generateGrid(size),
-                ),
-              ),
-            ),
-            dc.isDialogOpen ? DialogWidget() : const SizedBox.shrink()
-          ],
+        return GetBuilder<DataController>(
+          builder: (dtc) {
+            print(dtc.txtDataList);
+            return Stack(
+              children: [
+                dtc.txtDataList != null ? SizedBox(
+                  height: size.height,
+                  width: size.width,
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      children: generateGrid(size),
+                    ),
+                  ),
+                ) : const SizedBox.shrink(),
+                dc.isDialogOpen ? DialogWidget() : const SizedBox.shrink()
+              ],
+            );
+          }
         );
       }),
       floatingActionButton: floatingButton(size),
@@ -38,15 +45,16 @@ class MainPage extends StatelessWidget {
   }
 
   List<Widget> generateGrid(Size size) => List.generate(
-      20,
+      _dtc.txtDataList!.length,
       (index) => DataBox(
           color: Colors.red,
-          num: '10',
-          text: 'Product',
+          num: _dtc.txtDataList![index],
+          text: _dtc.mapList![index]['name'].toString(),
           textColor: Colors.white));
 
   Widget floatingButton(Size size) => GestureDetector(
         onTap: () {
+          _dtc.synchronizeMapLists(false);
           _dc.setDialogOpen(true);
         },
         child: Container(
