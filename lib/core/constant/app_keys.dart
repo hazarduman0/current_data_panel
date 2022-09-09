@@ -9,4 +9,6 @@ class AppKeys {
   static String textColor = 'Text Color';
   static String color = 'Color';
   static String add = 'Add';
+  static String pickTxtFile = 'Pick txt file';
+  static String noData = 'Txt file has no data';
 }

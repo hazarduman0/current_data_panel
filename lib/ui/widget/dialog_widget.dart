@@ -76,9 +76,10 @@ class DialogWidget extends StatelessWidget {
                 const Spacer(),
                 IconButton(
                     onPressed: () {
+                      _dtc.killTemps();
                       _dc.setDialogOpen(false);
-                      _dtc.killTempMap();
-                      print(_dtc.tempMapList);
+                      // _dtc.killTempMap();
+                      // print(_dtc.tempMapList);
                     },
                     icon: Icon(
                       Icons.clear,
@@ -99,80 +100,129 @@ class DialogWidget extends StatelessWidget {
             child: Form(
               key: _formKey,
               child: GetBuilder<DataController>(builder: (dtc) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: size.height * 0.05),
-                    formHeader(size, context, AppKeys.sourceFile),
-                    BrowseWidget(),
-                    SizedBox(height: size.height * 0.05),
-                    formHeader(size, context, AppKeys.addPeriod),
-                    PeriodBox(
-                      validator: (value) {},
-                      onSaved: (value) {
-                        dtc.setPeriod(int.parse(value!));
-                      },
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                    dtc.tempMapList!.isNotEmpty /////////////////////////
-                        ? Padding(
-                            padding: AppPadding.smallHorizontal(size),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: formList(size, dtc),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                    SizedBox(height: size.height * 0.02),
-                    addButton,
-                    SizedBox(height: size.height * 0.02),
-                    Align(
-                        alignment: Alignment.center,
-                        child: AppButton(
-                          text: AppKeys.save,
-                          onPressed: () => validateAndSave(),
-                        ))
-                  ],
-                );
+                return GetBuilder<DialogController>(builder: (dc) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: size.height * 0.05),
+                      formHeader(size, context, AppKeys.sourceFile),
+                      BrowseWidget(),
+                      SizedBox(height: size.height * 0.05),
+                      dc.tempLineCount >= 1
+                          ? formHeader(size, context, AppKeys.addPeriod)
+                          : const SizedBox.shrink(),
+                      dc.tempLineCount >= 1
+                          ? PeriodBox(
+                              validator: (value) {},
+                              onSaved: (value) {
+                                dtc.setPeriod(int.parse(value!));
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                      SizedBox(height: size.height * 0.05),
+                      dc.tempLineCount >= 1
+                          ? Padding(
+                              padding: AppPadding.smallHorizontal(size),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: formList(size, dtc, dc),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      SizedBox(height: size.height * 0.02),
+                      Align(
+                          alignment: Alignment.center,
+                          child: AppButton(
+                            text: AppKeys.save,
+                            onPressed: () => validateAndSave(dtc, dc),
+                          ))
+                    ],
+                  );
+                });
               }),
             ),
           ),
         ),
       );
 
-  Widget get addButton => TextButton(
-      onPressed: () {
-        _dtc.addMap();
-      },
-      child: Text('+ ${AppKeys.add}'));
+  // Widget get addButton => TextButton(
+  //     onPressed: () {
+  //       _dtc.addMap();
+  //     },
+  //     child: Text('+ ${AppKeys.add}'));
 
-  List<Widget> formList(Size size, DataController dtc) => List.generate(
-      dtc.tempMapList!.length,
-      (index) => Padding(
-            padding: AppPadding.smallVertical(size),
-            child: DataForms(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return;
-                }
-              },
-              onSaved: (value) {
-                dtc.setTempMapList(index, {
-                  'name': value!,
-                  'color': 'color',
-                  'textColor': 'textColor'
-                });
-              },
-            ),
-          ));
+  List<Widget> formList(Size size, DataController dtc, DialogController dc) =>
+      List.generate(
+          dc.tempLineCount,
+          (index) => Padding(
+                padding: AppPadding.smallVertical(size),
+                child: DataForms(
+                  index: index,
+                  initialValue: dc.tempMapList?[index]['name'] as String?,
+                  colorString: dc.tempMapList?[index]['color'] as String?,
+                  textColor: dc.tempMapList?[index]['textColor'] as String?,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return;
+                    }
+                  },
+                  onSaved: (value) {
+                    //dtc.setMapIndexName(int index, String? value);
 
-  validateAndSave() {
-    final _isValid = _formKey.currentState!.validate();
+                    dc.setMapListIndexName(index, value);
+
+                    // dc.setMapListIndexValue(index, {
+                    //   'name': value!,
+                    //   'color': 'color',
+                    //   'textColor': 'textColor'
+                    // });
+
+                    // dtc.setMapListIndexValue(index, {
+                    //   'name': value!,
+                    //   'color': 'color',
+                    //   'textColor': 'textColor'
+                    // });
+
+                    // dtc.setTempMapListWhenSave(index, {
+                    //   'name': value!,
+                    //   'color': 'color',
+                    //   'textColor': 'textColor'
+                    // });
+                  },
+                ),
+              ));
+
+  validateAndSave(DataController dtc, DialogController dc) async {
+    final _isValid = _formKey.currentState!.validate() && dc.tempPath != null;
     if (_isValid) {
       _formKey.currentState!.save();
-      _dtc.synchronizeMapLists(true);
-      _dtc.setDataStorage();
-      _dtc.killTempMap();
+
+      //path = temp
+      //line = temp
+      //await _dtc.tempToPrime();
+      _dtc.setLineCountOnly(dc.tempLineCount);
+      _dtc.setPathWithoutUpdate(dc.tempPath);
+      //storage
+      _dtc.setStorages(dc.tempPath, dtc.period);
+
+      dtc.setTxtDataList();
+      //kill temps
+      _dc.killTempLineWithoutUpdate();
+
+      //_dtc.killTemps();
+
+      _dtc.populateMapList();
+
+      _dc.killTempPathWithoutUpdate();
+
+      _dtc.mapToDataKey();
+
+      // _dtc.synchronizeMapLists(true);
+      // _dtc.setPath(value);
+      // _dtc.setPathStorage(value);
+      // _dtc.setDataStorage();
+      // _dtc.killTempMap();
+      // _dtc.readTxtFileWhenInit();
       _dc.setDialogOpen(false);
     }
   }
