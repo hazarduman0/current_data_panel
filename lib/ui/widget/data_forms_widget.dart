@@ -11,7 +11,6 @@ class DataForms extends StatelessWidget {
       this.index,
       this.colorString,
       this.validator,
-      //this.onSaved,
       this.onChanged,
       this.initialValue,
       this.textColor});
@@ -21,7 +20,6 @@ class DataForms extends StatelessWidget {
   String? colorString;
   String? textColor;
   String? Function(String?)? validator;
-  //Function(String?)? onSaved;
   Function(String)? onChanged;
 
   final DialogController _dc = Get.find();
@@ -54,13 +52,11 @@ class DataForms extends StatelessWidget {
                       width: eachColumnWidth,
                       child: TextFormField(
                         initialValue: initialValue ?? '',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: size.longestSide * 0.02, height: size.longestSide * 0.02),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: size.longestSide * 0.015),
                         decoration: formDecoration,
                         cursorColor: Colors.black87,
                         validator: validator,
-                        //onSaved: onSaved,
                         onChanged: onChanged,
-                        //onChangesinde tempMapi değiştir
                       ),
                     )
                   ],

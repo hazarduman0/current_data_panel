@@ -21,7 +21,6 @@ class MainPage extends StatelessWidget {
     log('width: ${size.width}');
     return Scaffold(
       body: GetBuilder<DataController>(builder: (dtc) {
-        //print(dtc.txtDataList);
         return Stack(
           children: [
             SizedBox(
@@ -45,29 +44,6 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  // Stack(
-  //           children: [
-  //             dtc.path != null && dtc.path!.isNotEmpty
-  //                 ? SizedBox(
-  //                     height: size.height,
-  //                     width: size.width,
-  //                     child: SingleChildScrollView(
-  //                       child: Wrap(
-  //                         children: generateGrid(size),
-  //                       ),
-  //                     ),
-  //                   )
-  //                 : SizedBox(
-  //                     height: size.height,
-  //                     width: size.width,
-  //                     child: const Center(
-  //                       child: Text('Lütfen bir txt seçiniz'),
-  //                     ),
-  //                   ),
-  //             dc.isDialogOpen ? DialogWidget() : const SizedBox.shrink()
-  //           ],
-  //         );
-
   List<Widget> generateGrid(Size size, DataController dtc) => List.generate(
       dtc.lineCount,
       (index) => DataBox(
@@ -80,14 +56,6 @@ class MainPage extends StatelessWidget {
                 radix: 16)),
           ));
 
-  // List<Widget> generateGrid(Size size) => List.generate(
-  //     _dtc.txtDataList!.length,
-  //     (index) => DataBox(
-  //         color: Colors.red,
-  //         num: _dtc.txtDataList![index],
-  //         text: _dtc.mapList![index]['name'].toString(),
-  //         textColor: Colors.white));
-
   Widget floatingButton(Size size) =>
       GetBuilder<DataController>(builder: (dtc) {
         return GestureDetector(
@@ -97,14 +65,6 @@ class MainPage extends StatelessWidget {
               dtc.setLineCount(dtc.path, false);
               dtc.syncMapLists();
             }
-            // else {
-            //   dtc.setTempLineZero();
-            // }
-
-            //dtc.setTempLineCount(dtc.lineCount);
-
-            // dtc.synchronizeMapLists(false);
-            // if (dtc.path != null) dtc.setDialogPath(dtc.path);
             _dc.setDialogOpen(true);
           },
           child: Container(

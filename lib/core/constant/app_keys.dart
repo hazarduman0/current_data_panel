@@ -11,4 +11,7 @@ class AppKeys {
   static String add = 'Add';
   static String pickTxtFile = 'Pick txt file';
   static String noData = 'Txt file has no data';
+  static String periodValidator1 = 'Lütfen bir sayı giriniz';
+  static String periodValidator2 = 'Lütfen yalnızca sayı giriniz';
+  static String periodValidator3 = 'Lütfen 0 dan büyük bir sayı giriniz';
 }

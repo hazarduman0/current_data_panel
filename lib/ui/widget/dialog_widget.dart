@@ -36,15 +36,12 @@ class DialogWidget extends StatelessWidget {
                 BoxShadow(
                     color: Colors.black26, blurRadius: 1.0, spreadRadius: 1.0)
               ]),
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                header(size, context),
-                const Divider(),
-                body(size, context)
-              ],
-            ),
+          child: Column(
+            children: [
+              header(size, context),
+              const Divider(),
+              body(size, context)
+            ],
           ),
         ),
       ),
@@ -55,10 +52,10 @@ class DialogWidget extends StatelessWidget {
       style: Theme.of(context)
           .textTheme
           .headline4!
-          .copyWith(fontSize: size.longestSide * 0.04));
+          .copyWith(fontSize: size.longestSide * 0.025, color: AppColor.black));
 
   Widget header(Size size, BuildContext context) => SizedBox(
-        height: size.longestSide * 0.05,
+        height: size.height * 0.08 - 8,
         width: size.width,
         child: Align(
           alignment: Alignment.center,
@@ -71,15 +68,13 @@ class DialogWidget extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headline5!
-                      .copyWith(fontSize: size.longestSide * 0.035),
+                      .copyWith(fontSize: size.longestSide * 0.03),
                 ),
                 const Spacer(),
                 IconButton(
                     onPressed: () {
                       _dtc.killTemps();
                       _dc.setDialogOpen(false);
-                      // _dtc.killTempMap();
-                      // print(_dtc.tempMapList);
                     },
                     icon: Icon(
                       Icons.clear,
@@ -92,7 +87,7 @@ class DialogWidget extends StatelessWidget {
       );
 
   Widget body(Size size, BuildContext context) => SizedBox(
-        height: size.longestSide * 0.75,
+        height: size.height * 0.72 - 8,
         width: size.width,
         child: SingleChildScrollView(
           child: Padding(
@@ -104,24 +99,43 @@ class DialogWidget extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: size.height * 0.05),
+                      SizedBox(height: size.height * 0.01),
                       formHeader(size, context, AppKeys.sourceFile),
                       BrowseWidget(),
-                      SizedBox(height: size.height * 0.05),
+                      SizedBox(height: size.height * 0.02),
                       dc.tempLineCount >= 1
                           ? formHeader(size, context, AppKeys.addPeriod)
                           : const SizedBox.shrink(),
                       dc.tempLineCount >= 1
                           ? PeriodBox(
                               validator: (value) {
+                                if (value == null) {
+                                   Get.snackbar('Geçersiz girdi',
+                                      AppKeys.periodValidator1);
+                                      return '';
+                                }
 
+                                if (value.isEmpty) {
+                                  Get.snackbar('Geçersiz girdi',
+                                      AppKeys.periodValidator1);
+                                      return '';
+                                } else if (!RegExp(r'^[0-9]+$')
+                                    .hasMatch(value)) {
+                                  Get.snackbar('Geçersiz girdi',
+                                      AppKeys.periodValidator2);
+                                      return '';
+                                } else if (int.parse(value) <= 0) {
+                                  Get.snackbar('Geçersiz girdi',
+                                      AppKeys.periodValidator3);
+                                      return '';
+                                }
                               },
                               onSaved: (value) {
                                 dtc.setPeriod(int.parse(value!));
                               },
                             )
                           : const SizedBox.shrink(),
-                      SizedBox(height: size.height * 0.05),
+                      SizedBox(height: size.height * 0.02),
                       dc.tempLineCount >= 1
                           ? Padding(
                               padding: AppPadding.smallHorizontal(size),
@@ -147,12 +161,6 @@ class DialogWidget extends StatelessWidget {
         ),
       );
 
-  // Widget get addButton => TextButton(
-  //     onPressed: () {
-  //       _dtc.addMap();
-  //     },
-  //     child: Text('+ ${AppKeys.add}'));
-
   List<Widget> formList(Size size, DataController dtc, DialogController dc) =>
       List.generate(
           dc.tempLineCount,
@@ -163,38 +171,9 @@ class DialogWidget extends StatelessWidget {
                   initialValue: dc.tempMapList?[index]['name'] as String?,
                   colorString: dc.tempMapList?[index]['color'] as String?,
                   textColor: dc.tempMapList?[index]['textColor'] as String?,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return;
-                    }
-                  },
                   onChanged: (value) {
                     dc.setTempMapListIndexName(index, value);
                   },
-                
-                  // onSaved: (value) {
-                  //   //dtc.setMapIndexName(int index, String? value);
-
-                  //   dc.setMapListIndexName(index, value);
-
-                  //   // dc.setMapListIndexValue(index, {
-                  //   //   'name': value!,
-                  //   //   'color': 'color',
-                  //   //   'textColor': 'textColor'
-                  //   // });
-
-                  //   // dtc.setMapListIndexValue(index, {
-                  //   //   'name': value!,
-                  //   //   'color': 'color',
-                  //   //   'textColor': 'textColor'
-                  //   // });
-
-                  //   // dtc.setTempMapListWhenSave(index, {
-                  //   //   'name': value!,
-                  //   //   'color': 'color',
-                  //   //   'textColor': 'textColor'
-                  //   // });
-                  // },
                 ),
               ));
 
@@ -203,32 +182,18 @@ class DialogWidget extends StatelessWidget {
     if (_isValid) {
       _formKey.currentState!.save();
 
-      //path = temp
-      //line = temp
-      //await _dtc.tempToPrime();
       _dtc.setLineCountOnly(dc.tempLineCount);
       _dtc.setPathWithoutUpdate(dc.tempPath);
-      //storage
       _dtc.setStorages(dc.tempPath, dtc.period);
 
       dtc.setTxtDataList();
-      //kill temps
       _dc.killTempLineWithoutUpdate();
-
-      //_dtc.killTemps();
 
       _dtc.populateMapList();
 
       _dc.killTempPathWithoutUpdate();
 
       _dtc.mapToDataKey();
-
-      // _dtc.synchronizeMapLists(true);
-      // _dtc.setPath(value);
-      // _dtc.setPathStorage(value);
-      // _dtc.setDataStorage();
-      // _dtc.killTempMap();
-      // _dtc.readTxtFileWhenInit();
       _dc.setDialogOpen(false);
     }
   }

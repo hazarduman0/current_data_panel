@@ -93,32 +93,14 @@ class BrowseWidget extends StatelessWidget {
 
       PlatformFile platformFile = result.files.single;
 
-      //tempPath
       await _dtc.setTempPath(platformFile.path.toString());
 
-      //txtDataList
-
-      //lineCount
       await _dtc.setLineCount(platformFile.path.toString(), false);
 
-      //populateMapList
       _dc.populateTempMapList();
 
       _dc.setDefaultTempMap();
       
-
-      //kaydet butonunda çalışacak;
-      //_app.setStorage(platformFile.path.toString());
-
-      //_dtc.setPath(platformFile.path.toString());
-
-      // _dtc.setDialogPath(platformFile.path.toString());
-
-      // await _dtc.readTxtWhenBrowsing();
-
-      // _dtc.setTempMapListLength();
-
-      log(platformFile.path.toString());
     } catch (e) {
       log('error : $e');
     }

@@ -57,7 +57,7 @@ class DialogController extends GetxController {
 
   setDefaultTempMap(){
     for(var map in _tempMapList.value!){
-      map['name'] = null;
+      map['name'] = '';
       map['color'] = AppColor.blue.value.toRadixString(16);
       map['textColor'] = AppColor.black.value.toRadixString(16);
     }
@@ -79,41 +79,5 @@ class DialogController extends GetxController {
 
   setTempMapListIndexValue(int index, Map<String, Object> map) {
     _tempMapList.value![index] = map;
-    //update();
-
-    // final mod = index % 3;
-
-    // switch (mod) {
-    //   case 0:
-    //     {
-    //       _mapList.value![index]['name'] = value;
-    //     }
-    //     break;
-
-    //   case 1:
-    //     {
-    //       _mapList.value![index]['color'] = value;
-    //     }
-    //     break;
-
-    //   case 3:
-    //     {
-    //       _mapList.value![index]['textColor'] = value;
-    //     }
-    //     break;
-    //   default:
-    //     {
-    //       log('Map list index value error');
-    //     }
-    //     break;
-    // }
-
-    // if (index % 3 == 0) {
-    //   _mapList.value![index]['name'] = value;
-    // } else if (index % 3 == 1) {
-    //   _mapList.value![index]['color'] = value;
-    // } else if (index % 3 == 2) {
-    //   _mapList.value![index]['textColor'] = value;
-    // }
   }
 }
