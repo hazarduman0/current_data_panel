@@ -103,6 +103,8 @@ class BrowseWidget extends StatelessWidget {
 
       //populateMapList
       _dc.populateTempMapList();
+
+      _dc.setDefaultTempMap();
       
 
       //kaydet butonunda çalışacak;

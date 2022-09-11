@@ -113,7 +113,9 @@ class DialogWidget extends StatelessWidget {
                           : const SizedBox.shrink(),
                       dc.tempLineCount >= 1
                           ? PeriodBox(
-                              validator: (value) {},
+                              validator: (value) {
+
+                              },
                               onSaved: (value) {
                                 dtc.setPeriod(int.parse(value!));
                               },
@@ -166,29 +168,33 @@ class DialogWidget extends StatelessWidget {
                       return;
                     }
                   },
-                  onSaved: (value) {
-                    //dtc.setMapIndexName(int index, String? value);
-
-                    dc.setMapListIndexName(index, value);
-
-                    // dc.setMapListIndexValue(index, {
-                    //   'name': value!,
-                    //   'color': 'color',
-                    //   'textColor': 'textColor'
-                    // });
-
-                    // dtc.setMapListIndexValue(index, {
-                    //   'name': value!,
-                    //   'color': 'color',
-                    //   'textColor': 'textColor'
-                    // });
-
-                    // dtc.setTempMapListWhenSave(index, {
-                    //   'name': value!,
-                    //   'color': 'color',
-                    //   'textColor': 'textColor'
-                    // });
+                  onChanged: (value) {
+                    dc.setTempMapListIndexName(index, value);
                   },
+                
+                  // onSaved: (value) {
+                  //   //dtc.setMapIndexName(int index, String? value);
+
+                  //   dc.setMapListIndexName(index, value);
+
+                  //   // dc.setMapListIndexValue(index, {
+                  //   //   'name': value!,
+                  //   //   'color': 'color',
+                  //   //   'textColor': 'textColor'
+                  //   // });
+
+                  //   // dtc.setMapListIndexValue(index, {
+                  //   //   'name': value!,
+                  //   //   'color': 'color',
+                  //   //   'textColor': 'textColor'
+                  //   // });
+
+                  //   // dtc.setTempMapListWhenSave(index, {
+                  //   //   'name': value!,
+                  //   //   'color': 'color',
+                  //   //   'textColor': 'textColor'
+                  //   // });
+                  // },
                 ),
               ));
 

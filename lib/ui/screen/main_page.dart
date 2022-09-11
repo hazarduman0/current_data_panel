@@ -71,12 +71,14 @@ class MainPage extends StatelessWidget {
   List<Widget> generateGrid(Size size, DataController dtc) => List.generate(
       dtc.lineCount,
       (index) => DataBox(
-          color: Color(
-              int.parse(dtc.mapList![index]['color'] as String, radix: 16)),
-          num: dtc.txtDataList![index]!,
-          text: dtc.mapList![index]['name'] as String,
-          textColor: Color(
-              int.parse(dtc.mapList![index]['textColor'] as String, radix: 16)),));
+            color: Color(
+                int.parse(dtc.mapList![index]['color'] as String, radix: 16)),
+            num: dtc.txtDataList![index]!,
+            text: dtc.mapList![index]['name'] as String,
+            textColor: Color(int.parse(
+                dtc.mapList![index]['textColor'] as String,
+                radix: 16)),
+          ));
 
   // List<Widget> generateGrid(Size size) => List.generate(
   //     _dtc.txtDataList!.length,

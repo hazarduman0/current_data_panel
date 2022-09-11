@@ -11,7 +11,8 @@ class DataForms extends StatelessWidget {
       this.index,
       this.colorString,
       this.validator,
-      this.onSaved,
+      //this.onSaved,
+      this.onChanged,
       this.initialValue,
       this.textColor});
 
@@ -20,7 +21,8 @@ class DataForms extends StatelessWidget {
   String? colorString;
   String? textColor;
   String? Function(String?)? validator;
-  Function(String?)? onSaved;
+  //Function(String?)? onSaved;
+  Function(String)? onChanged;
 
   final DialogController _dc = Get.find();
 
@@ -52,10 +54,13 @@ class DataForms extends StatelessWidget {
                       width: eachColumnWidth,
                       child: TextFormField(
                         initialValue: initialValue ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: size.longestSide * 0.02, height: size.longestSide * 0.02),
                         decoration: formDecoration,
                         cursorColor: Colors.black87,
                         validator: validator,
-                        onSaved: onSaved,
+                        //onSaved: onSaved,
+                        onChanged: onChanged,
+                        //onChangesinde tempMapi değiştir
                       ),
                     )
                   ],
@@ -78,7 +83,10 @@ class DataForms extends StatelessWidget {
                           child: Container(
                             height: formHeight * 0.8,
                             width: eachColumnWidth * 0.9,
-                            decoration: colorDecoration(color: colorString != null ? Color(int.parse(colorString!, radix: 16)) : AppColor.blue),
+                            decoration: colorDecoration(
+                                color: colorString != null
+                                    ? Color(int.parse(colorString!, radix: 16))
+                                    : AppColor.blue),
                           ),
                         ),
                       )
@@ -101,7 +109,10 @@ class DataForms extends StatelessWidget {
                         child: Container(
                           height: formHeight * 0.8,
                           width: eachColumnWidth * 0.9,
-                          decoration: colorDecoration(color: textColor != null ? Color(int.parse(textColor!, radix: 16)) : AppColor.black),
+                          decoration: colorDecoration(
+                              color: textColor != null
+                                  ? Color(int.parse(textColor!, radix: 16))
+                                  : AppColor.black),
                         ),
                       ),
                     )
@@ -134,8 +145,8 @@ class DataForms extends StatelessWidget {
           final grayscale = (0.299 * value.red) +
               (0.587 * value.green) +
               (0.114 * value.blue);
-          _dc.setMapIndexColor(index!, value.value.toRadixString(16));
-          _dc.setMapIndexTextColor(
+          _dc.setTempMapIndexColor(index!, value.value.toRadixString(16));
+          _dc.setTempMapIndexTextColor(
               index!,
               grayscale > 128
                   ? Colors.black.value.toRadixString(16)
@@ -149,7 +160,12 @@ class DataForms extends StatelessWidget {
       );
 
   InputDecoration get formDecoration => InputDecoration(
-      enabledBorder: outLineInputBorder, focusedBorder: outLineInputBorder);
+        enabledBorder: outLineInputBorder,
+        focusedBorder: outLineInputBorder,
+        isDense: true,
+        contentPadding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+        isCollapsed: false,
+      );
 
   BoxDecoration get boxDecoration => BoxDecoration(
       borderRadius: formRadius,

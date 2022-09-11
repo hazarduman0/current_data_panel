@@ -1,3 +1,4 @@
+import 'package:current_data_panel/core/constant/app_color.dart';
 import 'package:get/get.dart';
 
 class DialogController extends GetxController {
@@ -53,21 +54,30 @@ class DialogController extends GetxController {
     print('object');
   }
 
-  setMapListIndexName(int index, String? value) {
+
+  setDefaultTempMap(){
+    for(var map in _tempMapList.value!){
+      map['name'] = null;
+      map['color'] = AppColor.blue.value.toRadixString(16);
+      map['textColor'] = AppColor.black.value.toRadixString(16);
+    }
+  }
+
+  setTempMapListIndexName(int index, String? value) {
     _tempMapList.value![index]['name'] = value;
   }
 
-  setMapIndexColor(int index, String? value) {
+  setTempMapIndexColor(int index, String? value) {
     _tempMapList.value![index]['color'] = value;
     update();
   }
 
-  setMapIndexTextColor(int index, String? value) {
+  setTempMapIndexTextColor(int index, String? value) {
     _tempMapList.value![index]['textColor'] = value;
     update();
   }
 
-  setMapListIndexValue(int index, Map<String, Object> map) {
+  setTempMapListIndexValue(int index, Map<String, Object> map) {
     _tempMapList.value![index] = map;
     //update();
 
