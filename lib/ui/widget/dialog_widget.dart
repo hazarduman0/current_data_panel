@@ -55,7 +55,7 @@ class DialogWidget extends StatelessWidget {
           .copyWith(fontSize: size.longestSide * 0.025, color: AppColor.black));
 
   Widget header(Size size, BuildContext context) => SizedBox(
-        height: size.height * 0.08 - 8,
+        height: size.height * 0.1 - 8,
         width: size.width,
         child: Align(
           alignment: Alignment.center,
@@ -76,6 +76,7 @@ class DialogWidget extends StatelessWidget {
                       _dtc.killTemps();
                       _dc.setDialogOpen(false);
                     },
+                    splashColor: Colors.transparent,
                     icon: Icon(
                       Icons.clear,
                       size: size.longestSide * 0.035,
@@ -87,7 +88,7 @@ class DialogWidget extends StatelessWidget {
       );
 
   Widget body(Size size, BuildContext context) => SizedBox(
-        height: size.height * 0.72 - 8,
+        height: size.height * 0.7 - 8,
         width: size.width,
         child: SingleChildScrollView(
           child: Padding(

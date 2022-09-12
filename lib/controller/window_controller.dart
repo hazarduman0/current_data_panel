@@ -31,7 +31,7 @@ class WindowController extends GetxController with WindowListener {
       : isWidthShort600(size)
           ? size.width / 2
           : isWidthShort900(size)
-              ? size.width / 4
+              ? size.width / 3
               : isWidthShort1200(size)
                   ? (size.width- 10) / 4
                   : (size.width - 10)/ 5;
